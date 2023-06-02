@@ -23,19 +23,25 @@ public class CreateQuery {
         this.database = data;
     }
 
-    private String handleQuery(ResultSet resultSet, InitializeDatabase data, String tableName) throws SQLException
-    {
-        while(resultSet.next())
-        {
-            int id = resultSet.getInt("id");
-            String name = resultSet.getString("name");
-            String email = resultSet.getString("email");
-            Date created = resultSet.getDate("created");
-            boolean online = resultSet.getBoolean("online");
-            String phone = resultSet.getString("phone");
-            String address = resultSet.getString("address");
+    private String handleQuery(ResultSet resultSet) throws SQLException {
+        int id = 0;
+        String name = "";
+        String email="";
+        String phone="";
+        String address="";
+        String password="";
+        int personalNr=0;
+
+        while (resultSet.next()) {
+            id = resultSet.getInt("id");
+            name = resultSet.getString("name");
+            email = resultSet.getString("email");
+            phone = resultSet.getString("phone");
+            address = resultSet.getString("address");
+            password = resultSet.getString("password");
+            personalNr = resultSet.getInt("personalnumber");
         }
-        return "";
+        return "User:{ " + id +", "+name+", "+email+", "+phone+", "+address+", "+password+", "+personalNr+" }";
     }
 
     public void createQuery(String query, InitializeDatabase data, String type) throws SQLException
@@ -61,6 +67,7 @@ public class CreateQuery {
             setConnection(connection);
             Statement statement = connection.createStatement();
             ResultSet results = statement.executeQuery(query);
+            String temp = handleQuery(results);
 
         }
         connection.close();

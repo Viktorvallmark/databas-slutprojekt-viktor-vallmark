@@ -1,8 +1,10 @@
 package org.example;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Account {
 
-    private User user;
+    private final User user;
 
     private final int accID;
 
@@ -18,9 +20,6 @@ public class Account {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public int getID() {
         return accID;
@@ -35,34 +34,27 @@ public class Account {
     }
 
 
-    public boolean transferAmount (User toUser, User fromUser, double amount) {
+    public boolean changeAmount (double amount, @NotNull String addOrRemove) {
 
-
-        try {
-            if(getBalance() > amount){
-                double bal = getBalance();
-                double newBal = bal - amount;
-                setBalance(newBal);
+        double bal = getBalance();
+        if(addOrRemove.equals("add")) {
+            setBalance(bal+amount);
+            return true;
+        }else if (addOrRemove.equals("remove")) {
+            if(bal-amount >0) {
+                setBalance(bal - amount);
                 return true;
-            }else {
-                throw new Exception("Not enough money on the account to make the transfer!");
             }
-        }catch(Exception e) {
-            e.printStackTrace();
         }
 
         return false;
     }
 
-    public boolean recieveAmount (User fromUser, int fromId, double amount, User toUser, int toId) {
-
-        try {
-
-
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accID=" + accID +
+                ", balance=" + balance +
+                '}';
     }
-
 }
