@@ -2,11 +2,14 @@ package org.example;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class User {
 
     private ArrayList<Account> accounts = new ArrayList<>();
+    private ArrayList<Transactions> transactions;
     private String name;
     private String email;
 
@@ -102,15 +105,17 @@ public class User {
 
         return "No such account found on user!";
     }
-    public boolean transferAmount (@NotNull Swosh swosh, User toUser, Account toAcc, User fromUser, Account fromAcc, double amount) {
-
+    public Transactions transferAmount (@NotNull Swosh swosh, User toUser, Account toAcc, User fromUser, Account fromAcc, double amount) {
+        Instant time = Instant.now();
+        long millis = System.currentTimeMillis();
+        Date date = new Date(millis);
         if(swosh.getUserList().contains(fromUser) && swosh.getUserList().contains(toUser)) {
             boolean transferFrom = fromAcc.changeAmount(amount, "remove");
             boolean transferTo = toAcc.changeAmount(amount, "add");
-            return transferFrom && transferTo;
+            return new Transactions(date,fromUser,toUser,fromAcc,toAcc,amount);
         }
 
-        return false;
+        return null;
     }
 
     private String printAccounts(@NotNull ArrayList<Account> accList) {

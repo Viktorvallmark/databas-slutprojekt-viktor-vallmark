@@ -1,5 +1,7 @@
 package org.example;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 public class Swosh {
 
     private ArrayList<User> userList = new ArrayList<>();
+
 
     public Swosh(){
         super();
@@ -34,6 +37,18 @@ public class Swosh {
             e.printStackTrace();
         }
         return true;
+    }
+
+    private void updateFile(String info, File file) throws IOException {
+        try {
+
+            FileWriter fw = new FileWriter(file);
+            fw.write(info);
+            fw.flush();
+            fw.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateFile(String info) throws IOException {

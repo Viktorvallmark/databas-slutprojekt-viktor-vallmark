@@ -2,6 +2,8 @@ package org.example;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class Account {
 
     private final User user;
@@ -9,6 +11,7 @@ public class Account {
     private final int accID;
 
     private double balance;
+
 
     public Account(User user, double balance, int id) {
         this.user = user;
