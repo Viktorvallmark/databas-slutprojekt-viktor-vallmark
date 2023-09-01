@@ -3,10 +3,12 @@ package org.example;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 public class InitializeDatabase {
 
    private MysqlDataSource dataSource;
+
 
 
     public InitializeDatabase(String username, String password, String url, int port, String database, boolean useSSL)
@@ -28,8 +30,7 @@ public class InitializeDatabase {
             dataSource.setPassword(password);
             dataSource.setURL("jdbc:mysql://"+ url +":"+ port +"/"+ database +"?serverTimezone=UTC");
             dataSource.setUseSSL(useSSL);
-            System.out.println("Connection to the database is done!");
-            System.out.println(database);
+
             return dataSource;
         }catch(Exception e)
         {
@@ -44,8 +45,6 @@ public class InitializeDatabase {
         try
         {
             MysqlDataSource database = getDataSource();
-            System.out.println("Fetching database...");
-            System.out.println("done!");
             return database.getConnection();
         }catch(Exception e) {
             e.printStackTrace();

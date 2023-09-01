@@ -1,5 +1,7 @@
 package org.example;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.*;
 
 public class CreateQuery {
@@ -21,7 +23,7 @@ public class CreateQuery {
         this.database = data;
     }
 
-    private String handleQuery(ResultSet resultSet) throws SQLException {
+    private String handleQuery(@NotNull ResultSet resultSet) throws SQLException {
 
         int id = 0;
         String name = "";
@@ -52,7 +54,7 @@ public class CreateQuery {
             setConnection(connection);
             Statement statement = connection.createStatement();
             int results = statement.executeUpdate(query);
-            System.out.println("Results of the query: "+ results);
+
             return String.valueOf(results);
 
 
@@ -60,7 +62,7 @@ public class CreateQuery {
         {
             e.printStackTrace();
         }
-        }else if(type.equals("select") && table.equals("user"))
+        }else if(type.equals("select") && table.equals("users"))
         {
             setDatabase(data);
             Connection connection = database.getConnection();
@@ -110,7 +112,7 @@ public class CreateQuery {
             return "Account:{userid:"+id+", date:"+date+"from_account: "+ accnamefrom+ ",amount "+amount+"}";
         }
         connection.close();
-        return "Please use a proper SQL query!";
+        return null;
     }
 
 }

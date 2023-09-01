@@ -3,17 +3,21 @@ package org.example;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Vector;
 
 public class Account {
 
     private final User user;
 
-    private final int accID;
+    private final long accID;
+
+    private ArrayList<Transactions> transactions = new ArrayList<>();
 
     private double balance;
 
 
-    public Account(User user, double balance, int id) {
+    public Account(User user, double balance, long id) {
         this.user = user;
         this.balance = balance;
         this.accID = id;
@@ -24,7 +28,7 @@ public class Account {
     }
 
 
-    public int getID() {
+    public long getID() {
         return accID;
     }
 
@@ -36,9 +40,17 @@ public class Account {
         this.balance = balance;
     }
 
+    public ArrayList<Transactions> getTransactions() {
+        return transactions;
+    }
+
+    public void addBalance(double balance) {
+        this.balance += balance;
+    }
+
 
     public boolean changeAmount (double amount, @NotNull String addOrRemove) {
-
+    //TODO:Change to incorporate Transactions class and the arraylist of transactions
         double bal = getBalance();
         if(addOrRemove.equals("add")) {
             setBalance(bal+amount);
@@ -55,9 +67,17 @@ public class Account {
 
     @Override
     public String toString() {
+
+        HashMap<Object, Object> transactionMap = new HashMap<>();
+
+        for (Transactions transact : transactions) {
+            transactionMap.putIfAbsent(transact.date(), transact.amount());
+        }
+
+
         return "Account{" +
-                "accID=" + accID +
-                ", balance=" + balance +
-                '}';
+                "AccID=" + accID +
+                ", Transactions=" + transactionMap +
+                ", Balance=" + balance +'}';
     }
 }

@@ -8,28 +8,33 @@ import java.util.ArrayList;
 
 public class User {
 
-    private ArrayList<Account> accounts = new ArrayList<>();
-    private ArrayList<Transactions> transactions;
-    private String name;
-    private String email;
+    private final ArrayList<Account> accounts = new ArrayList<>();
+
+    private String name = "";
+    private String email = "";
 
     private String password;
 
-    private final int personalNr;
-    private final int userID;
+    private final long personalNr;
+    private final long userID;
 
-    private int phoneNr;
-    private String address;
+    private int phoneNr = 0;
+    private String address = "";
 
 
-    public User ( String name, String email,  int userID, String password, int personalNr) {
+    public User ( String name, String email, long userID, String password, int personalNr) {
 
         this.name = name;
         this.email = email;
         this.userID = userID;
         this.password = password;
         this.personalNr = personalNr;
+    }
 
+    public User (String password, long personalNr, long userID) {
+        this.password = password;
+        this.personalNr = personalNr;
+        this.userID = userID;
     }
 
     public ArrayList<Account> getAccount() {
@@ -61,11 +66,12 @@ public class User {
         this.password = password;
     }
 
-    public int getPersonalNr() {
+
+    public long getPersonalNr() {
         return personalNr;
     }
 
-    public int getUserID(){
+    public long getUserID(){
         return userID;
     }
     public int getPhoneNr() {
@@ -84,53 +90,56 @@ public class User {
         this.address = address;
     }
 
-    public void addAccount (User user, int accID, double amount) {
+    public boolean addAccount (User user, long accID, double amount) {
         try{
         Account newAcc = new Account(user,amount,accID);
-        ArrayList<Account> accList = getAccount();
-        accList.add(newAcc);
-        throw new Exception("Couldn't add account to user!");
+        accounts.add(newAcc);
+        return true;
         }catch (Exception e){
             e.printStackTrace();
         }
+        return false;
     }
 
-    public String removeAccount (User user, Account acc) {
+    public boolean removeAccount (User user, Account acc) {
         try {
             user.getAccount().remove(acc);
-            return "Account: "+acc.getID()+" from User: "+acc.getUser()+" has been deleted!";
+            return true;
         }catch (Exception e) {
             e.printStackTrace();
         }
 
-        return "No such account found on user!";
+        return false;
     }
     public Transactions transferAmount (@NotNull Swosh swosh, User toUser, Account toAcc, User fromUser, Account fromAcc, double amount) {
+        //TODO: Change transferAmount to incorporate Account class and its method changeAmount better
         Instant time = Instant.now();
         long millis = System.currentTimeMillis();
         Date date = new Date(millis);
-        if(swosh.getUserList().contains(fromUser) && swosh.getUserList().contains(toUser)) {
-            boolean transferFrom = fromAcc.changeAmount(amount, "remove");
-            boolean transferTo = toAcc.changeAmount(amount, "add");
-            return new Transactions(date,fromUser,toUser,fromAcc,toAcc,amount);
+        try {
+            if (swosh.getUserList().contains(fromUser) && swosh.getUserList().contains(toUser)) {
+                boolean transferFrom = fromAcc.changeAmount(amount, "remove");
+                boolean transferTo = toAcc.changeAmount(amount, "add");
+                return new Transactions(date, fromUser, toUser, fromAcc, toAcc, amount);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-
         return null;
     }
 
     private String printAccounts(@NotNull ArrayList<Account> accList) {
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
         for(Account acc : accList) {
-            temp += acc.toString();
+            temp.append(acc.toString());
         }
-    return temp;
+    return temp.toString();
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "accounts=" + printAccounts(accounts) +
-                ", name='" + name + '\'' +
+                " name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", personalNr=" + personalNr +
                 ", userID=" + userID +

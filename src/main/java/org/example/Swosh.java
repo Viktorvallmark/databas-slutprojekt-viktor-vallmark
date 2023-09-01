@@ -11,6 +11,8 @@ public class Swosh {
 
     private ArrayList<User> userList = new ArrayList<>();
 
+    private long userID = 1;
+
 
     public Swosh(){
         super();
@@ -20,23 +22,40 @@ public class Swosh {
         return userList;
     }
 
-    public boolean addUser(String name, String email, int age, int ID, String password, int personalNr){
+    public long getUserID(){
+        return userID;
+    }
+    public void incrementUserID() {
+        this.userID++;
+    }
+
+    public User addUser(String name, String email, int age, int ID, String password, int personalNr){
         try{
             User user = new User(name, email, ID, password, personalNr);
-            getUserList().add(user);
+            userList.add(user);
+            return user;
         }catch (Exception e){
             e.printStackTrace();
         }
-        return false;
+        return null;
+    }
+    public void addUser(long id, String pw, long persNr) {
+        try{
+            User user = new User(pw, persNr, id);
+            userList.add(user);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean removeUser(User user){
         try{
             getUserList().remove(user);
+            return true;
         }catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     private void updateFile(String info, File file) throws IOException {
